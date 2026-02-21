@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SAATHVIK | Digital Architect</title>
-    <meta name="google-site-verification" content="Lb82t0L5vwJM1zc1qR7WEFWrD0CFq1Ns1ohIJFuYWrk" />
     <style>
         :root {
             --accent: #00f2fe;
@@ -36,34 +35,6 @@
             background-size: 50px 50px; z-index: -2; opacity: 0.15;
         }
 
-        /* Background visual layer: optional image with layered gradients and gentle motion */
-        :root { --bg-image: url('assets/bg.jpg'); }
-
-        body::before {
-            content: "";
-            position: fixed;
-            inset: 0;
-            z-index: -3;
-            pointer-events: none;
-            background-image:
-                var(--bg-image),
-                radial-gradient(600px 400px at 10% 20%, rgba(0,242,254,0.08), transparent 18%),
-                radial-gradient(800px 500px at 90% 80%, rgba(0,255,136,0.06), transparent 22%),
-                linear-gradient(180deg, rgba(2,2,2,1), rgba(6,6,6,0.98));
-            background-repeat: no-repeat, no-repeat, no-repeat, no-repeat;
-            background-position: center, 10% 20%, 90% 80%, center;
-            background-size: cover, 600px 400px, 800px 500px, cover;
-            background-blend-mode: normal, screen, screen, normal;
-            animation: bg-drift 14s ease-in-out infinite;
-        }
-
-        @keyframes bg-drift {
-            0% { transform: translateY(0) scale(1); filter: blur(0px); }
-            50% { transform: translateY(-28px) scale(1.02); filter: blur(1px); }
-            100% { transform: translateY(0) scale(1); filter: blur(0px); }
-        }
-
-        /* --- Updated Header with Sign In --- */
         header {
             position: fixed; top: 0; width: 100%; padding: 25px 50px;
             display: flex; justify-content: space-between; align-items: center;
@@ -79,87 +50,110 @@
 
         .header-right { display: flex; align-items: center; gap: 40px; }
         
-        /* Sign-in button removed — header uses status only */
-
-        .header-status {
-            font-size: 10px; letter-spacing: 3px; text-transform: uppercase;
-            color: #555; display: flex; gap: 30px;
+        .signin-btn {
+            padding: 10px 24px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            color: #fff;
+            text-transform: uppercase;
+            font-size: 11px;
+            letter-spacing: 2px;
+            border-radius: 100px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: none;
         }
+
+        .signin-btn:hover {
+            background: var(--accent);
+            color: #000;
+            border-color: var(--accent);
+            box-shadow: 0 0 20px var(--accent-glow);
+        }
+
+        .header-status { font-size: 10px; letter-spacing: 3px; color: #555; display: flex; gap: 30px; }
         #live-clock { color: var(--accent); }
 
-        .cursor {
-            width: 20px; height: 20px; border: 1px solid var(--accent); border-radius: 50%;
-            position: fixed; pointer-events: none; z-index: 9999; transform: translate(-50%, -50%);
-            transition: width 0.3s, height 0.3s, background 0.3s;
+        /* --- LOGIN OVERLAY --- */
+        #login-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8); backdrop-filter: blur(40px);
+            display: none; align-items: center; justify-content: center; z-index: 2000;
+            opacity: 0; transition: opacity 0.5s ease;
         }
 
+        .login-box {
+            background: var(--card-bg); border: 1px solid var(--border);
+            padding: 50px; border-radius: 30px; width: 400px; text-align: center;
+        }
+
+        .login-box h3 { letter-spacing: 5px; text-transform: uppercase; margin-bottom: 30px; font-size: 18px; }
+
+        .input-group { margin-bottom: 20px; text-align: left; }
+        .input-group label { font-size: 10px; letter-spacing: 2px; color: #555; text-transform: uppercase; display: block; margin-bottom: 8px; }
+        
+        .input-group input {
+            width: 100%; padding: 12px; background: rgba(255,255,255,0.05);
+            border: 1px solid var(--border); border-radius: 10px; color: #fff;
+            font-size: 14px; outline: none; transition: border 0.3s;
+        }
+
+        .input-group input:focus { border-color: var(--accent); }
+
+        .login-action {
+            width: 100%; padding: 15px; background: var(--accent); border: none;
+            border-radius: 10px; color: #000; font-weight: 800; letter-spacing: 2px;
+            text-transform: uppercase; transition: transform 0.3s;
+        }
+
+        .login-action:hover { transform: scale(1.02); box-shadow: 0 0 20px var(--accent-glow); }
+
+        .close-login { position: absolute; top: 30px; right: 40px; font-size: 12px; letter-spacing: 3px; color: #555; text-transform: uppercase; cursor: none; }
+
+        /* --- REST OF THE UI --- */
+        .cursor { width: 20px; height: 20px; border: 1px solid var(--accent); border-radius: 50%; position: fixed; pointer-events: none; z-index: 9999; transform: translate(-50%, -50%); transition: width 0.3s, height 0.3s, background 0.3s; }
         .container { text-align: center; z-index: 10; width: 95%; max-width: 1400px; padding-top: 180px; flex: 1; }
-
-        h1 {
-            font-size: clamp(60px, 10vw, 120px); letter-spacing: 25px; font-weight: 900;
-            background: linear-gradient(180deg, #fff 40%, #333 100%);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 10px;
-        }
-
+        h1 { font-size: clamp(60px, 10vw, 120px); letter-spacing: 25px; font-weight: 900; background: linear-gradient(180deg, #fff 40%, #333 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 10px; }
         .dynamic-title { font-size: 14px; letter-spacing: 12px; color: var(--accent); text-transform: uppercase; margin-bottom: 60px; height: 20px; }
-
         .project-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; perspective: 1000px; margin-bottom: 100px; }
-
         .reveal { opacity: 0; transform: translateY(50px); transition: all 1s cubic-bezier(0.2, 1, 0.3, 1); }
         .reveal.active { opacity: 1; transform: translateY(0); }
-
-        .project-card {
-            background: var(--card-bg); border: 1px solid var(--border); border-radius: 24px;
-            padding: 40px; text-decoration: none; color: inherit; text-align: left;
-            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); position: relative; overflow: hidden; backdrop-filter: blur(10px);
-            display: flex; flex-direction: column; height: 100%;
-        }
-
-        .project-card:hover {
-            transform: translateY(-10px) rotateX(4deg); border-color: var(--accent);
-            background: rgba(0, 242, 254, 0.05); box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
-        }
-
+        .project-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 24px; padding: 40px; text-decoration: none; color: inherit; text-align: left; transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); position: relative; overflow: hidden; backdrop-filter: blur(10px); display: flex; flex-direction: column; height: 100%; }
+        .project-card:hover { transform: translateY(-10px) rotateX(4deg); border-color: var(--accent); background: rgba(0, 242, 254, 0.05); box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5); }
         .stats-badge { font-size: 9px; background: rgba(0, 255, 136, 0.1); color: var(--success); padding: 4px 10px; border-radius: 4px; border: 1px solid rgba(0, 255, 136, 0.2); letter-spacing: 1px; }
-
         .project-card h2 { font-size: 24px; letter-spacing: 4px; color: #fff; text-transform: uppercase; margin-bottom: 15px; }
         .project-card p { font-size: 13px; line-height: 1.8; color: #888; margin: 15px 0; flex: 1; }
-
         .executive-info { margin-top: 20px; }
         .executive-tag { display: block; font-size: 11px; letter-spacing: 2.5px; color: #fff; opacity: 0.6; text-transform: uppercase; margin-bottom: 5px; }
         .business-phone { display: block; font-size: 13px; color: var(--accent); letter-spacing: 2px; text-decoration: none; font-weight: 600; }
-        
-        .coming-soon-ticker {
-            display: flex; align-items: center; gap: 8px; font-size: 11px; color: var(--warning); 
-            letter-spacing: 2px; text-transform: uppercase; font-weight: 600; margin-top: 5px;
-        }
-        .dot { width: 6px; height: 6px; background: var(--warning); border-radius: 50%; animation: pulse-warn 1.5s infinite; }
-
-        .merchant-btn {
-            margin-top: 25px; padding: 14px 22px; background: transparent; border: 1px solid var(--accent);
-            color: var(--accent); text-align: center; font-size: 11px; letter-spacing: 2px;
-            text-transform: uppercase; border-radius: 10px; transition: all 0.3s ease; font-weight: 600;
-        }
+        .merchant-btn { margin-top: 25px; padding: 14px 22px; background: transparent; border: 1px solid var(--accent); color: var(--accent); text-align: center; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; border-radius: 10px; transition: all 0.3s ease; font-weight: 600; }
         .merchant-btn:hover { background: var(--accent); color: #000; box-shadow: 0 0 25px var(--accent-glow); transform: scale(1.02); }
-
-        footer {
-            width: 100%; padding: 80px 50px; border-top: 1px solid var(--border);
-            display: grid; grid-template-columns: repeat(4, 1fr); gap: 40px; 
-            background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(10px); z-index: 10;
-        }
+        footer { width: 100%; padding: 80px 50px; border-top: 1px solid var(--border); display: grid; grid-template-columns: repeat(4, 1fr); gap: 40px; background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(10px); z-index: 10; }
         footer h4 { color: var(--accent); font-size: 11px; margin-bottom: 25px; letter-spacing: 3px; text-transform: uppercase; }
         footer a { color: #555; text-decoration: none; display: block; margin-bottom: 12px; font-size: 11px; letter-spacing: 1px; transition: color 0.3s; }
         footer a:hover { color: #fff; }
-
-        @keyframes pulse-warn { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
-
-        @media (max-width: 1100px) { .project-grid { grid-template-columns: 1fr; } footer { grid-template-columns: 1fr 1fr; } }
-        @media (max-width: 768px) { footer { grid-template-columns: 1fr; text-align: center; } .cursor, header { padding: 20px; } .header-right { display: none; } }
     </style>
 </head>
 <body>
 
     <div class="grid-bg"></div>
+
+    <!-- Login Overlay -->
+    <div id="login-overlay">
+        <div class="close-login" onclick="toggleLogin(false)" onmouseover="growCursor()" onmouseout="resetCursor()">[ Close Terminal ]</div>
+        <div class="login-box">
+            <h3>Secure Entry</h3>
+            <div class="input-group">
+                <label>Architect Identifier</label>
+                <input type="text" placeholder="Username / Email">
+            </div>
+            <div class="input-group">
+                <label>Neural Key</label>
+                <input type="password" placeholder="••••••••">
+            </div>
+            <button class="login-action" onmouseover="growCursor()" onmouseout="resetCursor()">Initiate Session</button>
+        </div>
+    </div>
     
     <header>
         <div class="brand-container">
@@ -167,10 +161,8 @@
             <img src="https://nearbydeals.com.au" alt="Nearby Deals" class="brand-logo" id="logo2">
         </div>
         <div class="header-right">
-            <div class="header-status">
-                <div>Loc: Perth, WA</div>
-                <div id="live-clock">00:00:00</div>
-            </div>
+            <div class="header-status"><div>Loc: Perth, WA</div><div id="live-clock">00:00:00</div></div>
+            <a href="javascript:void(0)" class="signin-btn" onclick="toggleLogin(true)" onmouseover="growCursor()" onmouseout="resetCursor()">Sign In</a>
         </div>
     </header>
 
@@ -179,77 +171,35 @@
     <div class="container">
         <h1>SAATHVIK</h1>
         <div class="dynamic-title"><span id="typewriter"></span></div>
-        
         <div class="project-grid">
             <!-- SCONTO -->
             <div class="project-card reveal" onmouseover="growCursor()" onmouseout="resetCursor()">
-                <div class="card-header">
-                    <h2>Sconto</h2>
-                    <div class="stats-badge">50K+ ACTIVE STUDENTS</div>
-                </div>
-                <p>Unlock Australia's premier student discount platform. Verified, pre-negotiated deals on fashion, tech, and travel designed to save you instantly.</p>
-                <div class="executive-info">
-                    <div class="executive-tag">CEO: Valesh Bodapati</div>
-                    <a href="tel:+61433659225" class="business-phone">📞 +61 433 659 225</a>
-                </div>
+                <div class="card-header"><h2>Sconto</h2><div class="stats-badge">50K+ ACTIVE STUDENTS</div></div>
+                <p>Unlock Australia's premier student discount platform. Verified rewards on fashion and tech.</p>
+                <div class="executive-info"><div class="executive-tag">CEO: Valesh Bodapati</div><a href="tel:+61433659225" class="business-phone">📞 +61 433 659 225</a></div>
                 <a href="https://sconto.com.au" class="merchant-btn" target="_blank">Partner with Sconto</a>
             </div>
-
             <!-- NEARBY DEALS -->
             <div class="project-card reveal" onmouseover="growCursor()" onmouseout="resetCursor()">
-                <div class="card-header">
-                    <h2>Nearby Deals</h2>
-                    <div class="stats-badge">LIVE GEO-SCANNING</div>
-                </div>
-                <p>Your intelligent radar for real-time local bargains. Discover verified neighborhood offers powered by geo-spatial tech exactly where you are right now.</p>
-                <div class="executive-info">
-                    <div class="executive-tag">CEO: Nirupama Yarlagadda</div>
-                    <div class="coming-soon-ticker"><div class="dot"></div><span>Comms Line Pending</span></div>
-                </div>
+                <div class="card-header"><h2>Nearby Deals</h2><div class="stats-badge">LIVE GEO-SCANNING</div></div>
+                <p>Intelligent radar for real-time local bargains. Discover verified neighborhood offers instantly.</p>
+                <div class="executive-info"><div class="executive-tag">CEO: Nirupama Yarlagadda</div></div>
                 <a href="https://nearbydeals.com.au" class="merchant-btn" target="_blank">List Your Business</a>
             </div>
-
             <!-- TICKZY -->
             <div class="project-card reveal" onmouseover="growCursor()" onmouseout="resetCursor()">
-                <div class="card-header">
-                    <h2>Tickzy</h2>
-                    <div class="stats-badge">ULTRA-LOW FEES</div>
-                </div>
-                <p>The most affordable independent ticketing platform in Australia. We empower event creators with powerful tools and transparent pricing to make ticketing simple and fair.</p>
-                <div class="executive-info">
-                    <div class="executive-tag">CEO: Valesh Bodapati</div>
-                    <a href="tel:+61433659225" class="business-phone">📞 +61 433 659 225</a>
-                </div>
+                <div class="card-header"><h2>Tickzy</h2><div class="stats-badge">ULTRA-LOW FEES</div></div>
+                <p>Affordable independent ticketing for Australian creators. Transparent pricing and powerful tools.</p>
+                <div class="executive-info"><div class="executive-tag">CEO: Valesh Bodapati</div><a href="tel:+61433659225" class="business-phone">📞 +61 433 659 225</a></div>
                 <a href="https://tickzy.com.au" class="merchant-btn" target="_blank">Create Your Event</a>
             </div>
         </div>
     </div>
 
     <footer>
-        <div>
-            <h4>ARCHITECTURE</h4>
-            <a href="#">System Integrity</a>
-            <a href="#">Neural Core</a>
-            <a href="#">M4 Performance</a>
-        </div>
-        <div>
-            <h4>VENTURES</h4>
-            <a href="https://sconto.com.au" target="_blank">Sconto.com.au</a>
-            <a href="https://tickzy.com.au" target="_blank">Tickzy.com.au</a>
-            <a href="https://nearbydeals.com.au" target="_blank">NearbyDeals.com.au</a>
-        </div>
-        <div>
-            <h4>LEGAL</h4>
-            <a href="#">Privacy Policy</a>
-            <a href="#">Terms of Architecture</a>
-            <a href="#">Compliance AU</a>
-        </div>
-        <div>
-            <h4>SECURE LINE</h4>
-            <p>Node: AU-PER-01</p>
-            <p>Architecting from Perth, WA</p>
-            <p style="color: var(--accent); margin-top: 15px; font-weight: 700;">SAATHVIK &copy; 2026</p>
-        </div>
+        <div><h4>ARCHITECTURE</h4><a href="#">System Integrity</a><a href="#">M4 Performance</a></div>
+        <div><h4>VENTURES</h4><a href="https://sconto.com.au" target="_blank">Sconto.com.au</a><a href="https://tickzy.com.au" target="_blank">Tickzy.com.au</a></div>
+        <div><h4>SECURE LINE</h4><p>Node: AU-PER-01</p><p style="color: var(--accent); margin-top: 15px; font-weight: 700;">SAATHVIK &copy; 2026</p></div>
     </footer>
 
     <script>
@@ -258,16 +208,23 @@
         const clockElement = document.getElementById('live-clock');
         const logo1 = document.getElementById('logo1');
         const logo2 = document.getElementById('logo2');
+        const overlay = document.getElementById('login-overlay');
 
-        function updateClock() {
-            clockElement.textContent = new Date().toLocaleTimeString('en-AU', { hour12: false });
+        // Toggle Login Terminal
+        function toggleLogin(show) {
+            if(show) {
+                overlay.style.display = 'flex';
+                setTimeout(() => overlay.style.opacity = '1', 10);
+            } else {
+                overlay.style.opacity = '0';
+                setTimeout(() => overlay.style.display = 'none', 500);
+            }
         }
+
+        function updateClock() { clockElement.textContent = new Date().toLocaleTimeString('en-AU', { hour12: false }); }
         setInterval(updateClock, 1000); updateClock();
 
-        setInterval(() => {
-            logo1.classList.toggle('active');
-            logo2.classList.toggle('active');
-        }, 4000);
+        setInterval(() => { logo1.classList.toggle('active'); logo2.classList.toggle('active'); }, 4000);
 
         document.addEventListener('mousemove', (e) => {
             cursor.style.left = e.clientX + 'px';
@@ -279,17 +236,13 @@
 
         const observer = new IntersectionObserver((entries) => {
             entries.forEach((entry, index) => {
-                if (entry.isIntersecting) {
-                    setTimeout(() => { entry.target.classList.add('active'); }, index * 200); 
-                }
+                if (entry.isIntersecting) setTimeout(() => entry.target.classList.add('active'), index * 200); 
             });
         }, { threshold: 0.1 });
-
         document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
 
         const roles = ["Architect of the Digital Era", "CEO: Sconto", "CEO: Tickzy", "Lead: Nearby Deals"];
         let rI = 0, cI = 0, del = false;
-
         function type() {
             const cur = roles[rI];
             textElement.textContent = del ? cur.substring(0, cI--) : cur.substring(0, cI++);
@@ -298,18 +251,6 @@
             else setTimeout(type, del ? 40 : 100);
         }
         window.onload = type;
-        
-        // Background image loader: use relative path and gracefully fallback
-        (function() {
-            const imgPath = 'assets/bg.jpg';
-            const img = new Image();
-            img.onload = () => {
-                document.documentElement.style.setProperty('--bg-image', `url('${imgPath}')`);
-            };
-            img.onerror = () => {
-                document.documentElement.style.setProperty('--bg-image', 'none');
-            };
-            img.src = imgPath;
-        })();
+    </script>
 </body>
 </html>
